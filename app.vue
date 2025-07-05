@@ -1,11 +1,7 @@
 <template>
   <UApp>
-    <div>
-      <h1 class="text-3xl font-bold underline">
-        Hello world!
-      </h1>
-      <UButton>Button</UButton>
-      <ColorModeButton></ColorModeButton>
-    </div>
+    <NuxtLayout>
+      <NuxtPage></NuxtPage>
+    </NuxtLayout>
   </UApp>
 </template>
