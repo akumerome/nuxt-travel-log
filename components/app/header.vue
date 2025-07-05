@@ -9,7 +9,7 @@
             </div>
             <div class="flex items-center justify-end lg:flex-1 gap-1.5">
                 <UButton class="border border-inverted" color="neutral" variant="outline">Sign in</UButton>
-                <ColorModeButton></ColorModeButton>
+                <AppColorModeButton></AppColorModeButton>
             </div>
         </div>
     </header>
