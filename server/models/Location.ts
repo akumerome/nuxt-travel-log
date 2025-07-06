@@ -28,6 +28,10 @@ const LocationSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
     created_at: {
       type: Number,
       default: () => Math.floor(Date.now() / 1000), // UNIX timestamp in seconds

@@ -4,7 +4,7 @@ import "./lib/env";
 export default defineNuxtConfig({
   compatibilityDate: "2025-05-15",
   devtools: { enabled: true },
-  modules: ["@nuxt/ui"],
+  modules: ["@nuxt/ui", "nuxt-auth-utils"],
   css: ["~/assets/css/main.css"],
   vite: {
     plugins: [tailwindcss()],
