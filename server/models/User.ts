@@ -1,23 +1,29 @@
 import mongoose from "mongoose";
 
 const options = {
-  collection: "location_log_image",
+  collection: "user",
 };
 
-const LocationLogImageSchema = new mongoose.Schema(
+const UserSchema = new mongoose.Schema(
   {
-    key: {
+    name: {
       type: String,
       required: true,
       trim: true,
     },
-    location_log: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "LocationLog",
+    email: {
+      type: String,
+      required: true,
+      trim: true,
     },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+    password: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    email_verified: {
+      type: Boolean,
+      default: false,
     },
     created_at: {
       type: Number,
@@ -32,11 +38,9 @@ const LocationLogImageSchema = new mongoose.Schema(
 );
 
 // Update updated_at on save
-LocationLogImageSchema.pre("save", function (next) {
+UserSchema.pre("save", function (next) {
   this.updated_at = Math.floor(Date.now() / 1000);
   next();
 });
 
-export const Location =
-  mongoose.models.LocationLogImage ||
-  mongoose.model("LocationLogImage", LocationLogImageSchema);
+export const User = mongoose.models.User || mongoose.model("User", UserSchema);
