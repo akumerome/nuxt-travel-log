@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
   if (!user) {
     throw createError({
       statusCode: 401,
-      message: "Email or password is incorrect.",
+      statusMessage: "Email or password is incorrect.",
     });
   }
 
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
   if (!isAuthenticated) {
     throw createError({
       statusCode: 401,
-      message: "Email or password is incorrect.",
+      statusMessage: "Email or password is incorrect.",
     });
   }
 
@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
   });
 
   return {
-    message: "User logged in successfully.",
+    statusMessage: "User logged in successfully.",
     user: { name: user.name, email: user.email },
   };
 });
