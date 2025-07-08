@@ -2,13 +2,13 @@ import { z } from "zod";
 import { User } from "../models/User";
 
 const bodySchema = z.object({
-  name: z.string(),
+  username: z.string(),
   email: z.string().email(),
   password: z.string().min(8),
 });
 
 export default defineEventHandler(async (event) => {
-  const { name, email, password } = await readValidatedBody(
+  const { username, email, password } = await readValidatedBody(
     event,
     bodySchema.parse
   );
@@ -18,20 +18,27 @@ export default defineEventHandler(async (event) => {
   if (existing) {
     throw createError({
       statusCode: 401,
-      message: "Email address already exists.",
+      statusMessage: "Email address already exists.",
     });
   }
 
   const hashedPassword = await hashPassword(password);
   const user = new User({
-    name,
+    username,
     email,
     password: hashedPassword,
   });
   await user.save();
 
+  // set the user session in the cookie
+  await setUserSession(event, {
+    user: {
+      email: user.email,
+    },
+  });
+
   return {
-    message: "User registered successfully.",
+    statusMessage: "User signed up successfully.",
     user,
   };
 });
