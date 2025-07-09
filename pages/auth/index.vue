@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+definePageMeta({
+    middleware: ["dashboard"],
+});
+
 const route = useRoute();
 const action = computed(() =>
     route.query.action === "signup" ? "signup" : "login"

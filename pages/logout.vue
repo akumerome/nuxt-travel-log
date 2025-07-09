@@ -1,9 +1,13 @@
 <script lang="ts" setup>
+definePageMeta({
+    middleware: ["auth"],
+});
+
 const { clear: clearSession } = useUserSession();
 
 onMounted(async () => {
     await clearSession();
-    await navigateTo('/');
+    await navigateTo("/");
 });
 </script>
 
