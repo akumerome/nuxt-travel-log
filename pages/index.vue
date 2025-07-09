@@ -1,3 +1,9 @@
+<script lang="ts" setup>
+definePageMeta({
+    middleware: ["dashboard"],
+});
+</script>
+
 <template>
 <div class="flex justify-center border border-b-0 border-muted relative z-[1] rounded-t-md">
     <div class="relative isolate">
