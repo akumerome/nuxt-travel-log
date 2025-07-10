@@ -26,7 +26,7 @@ const items = ref<DropdownMenuItem[]>([
     <button>
         <UAvatar :alt="user.username || 'G'" size="md" :ui="{
             root: 'bg-inverted',
-            fallback: 'text-white'
+            fallback: 'text-inverted'
         }" />
     </button>
 </UDropdownMenu>

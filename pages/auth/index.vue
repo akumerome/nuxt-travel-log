@@ -10,12 +10,14 @@ const action = computed(() =>
 </script>
 
 <template>
-<AuthCard v-if="action === 'signup'" title="Sign up" subtitle="Please enter your credentials to sign up"
-    redirect_text="Already have an account? " redirect_link="Log in" link_to="/auth?action=login">
-    <AuthSignupForm></AuthSignupForm>
-</AuthCard>
-<AuthCard v-else title="Welcome back" subtitle="Please enter your credentials to log in"
-    redirect_text="Don't have an account? " redirect_link="Sign up" link_to="/auth?action=signup">
-    <AuthLoginForm></AuthLoginForm>
-</AuthCard>
+<div class="mx-4 my-6">
+    <AuthCard v-if="action === 'signup'" title="Sign up" subtitle="Please enter your credentials to sign up"
+        redirectText="Already have an account? " redirectLink="Log in" linkTo="/auth?action=login">
+        <AuthSignupForm></AuthSignupForm>
+    </AuthCard>
+    <AuthCard v-else title="Welcome back" subtitle="Please enter your credentials to log in"
+        redirectText="Don't have an account? " redirectLink="Sign up" linkTo="/auth?action=signup">
+        <AuthLoginForm></AuthLoginForm>
+    </AuthCard>
+</div>
 </template>
