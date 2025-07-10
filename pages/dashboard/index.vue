@@ -5,5 +5,10 @@ definePageMeta({
 </script>
 
 <template>
-<h2>Dashboard page</h2>
+<div class="flex-1 flex">
+    <div class="flex">
+        <Sidebar></Sidebar>
+        <div class="flex-1"> MAPA</div>
+    </div>
+</div>
 </template>

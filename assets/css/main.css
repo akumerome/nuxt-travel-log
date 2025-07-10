@@ -1,2 +1,22 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+
+@font-face {
+  font-family: "Metropolis";
+    src: local("Metropolis"),
+     url(assets/fonts/Metropolis/Metropolis-Regular.otf) format("truetype");
+}
+
+body {
+  font-family: "Metropolis";
+}
+
+@theme static {
+  --sidebar-padding: 0.5rem;
+  --collapsed-sidebar-width: 4rem;
+  --expanded-sidebar-width: 12rem;
+  --collapsed-sidebar-element-size: calc(
+    var(--collapsed-sidebar-width) - (2 * var(--sidebar-padding))
+  );
+  --sidebar-icon-size: calc(var(--collapsed-sidebar-element-size) - 1.25rem);
+}

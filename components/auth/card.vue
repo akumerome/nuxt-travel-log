@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-defineProps({
-    title: String,
-    subtitle: String,
-    redirect_text: String,
-    redirect_link: String,
-    link_to: String
-})
+const props = defineProps<{
+    title: string;
+    subtitle: string;
+    redirectText: string;
+    redirectLink: string;
+    linkTo: string;
+}>();
 </script>
 
 <template>
@@ -18,13 +18,14 @@ defineProps({
             </div>
             <div class="w-full">
                 <div class="text-center py-6">
-                    <h2 class="text-xl font-bold">{{ title }}</h2>
-                    <p>{{ subtitle }}</p>
+                    <h2 class="text-xl font-bold">{{ props.title }}</h2>
+                    <p>{{ props.subtitle }}</p>
                 </div>
                 <slot></slot>
                 <div class="mt-4 text-center">
-                    <p>{{ redirect_text }} <ULink raw :to=link_to active-class="font-bold" inactive-class="text-muted">
-                            {{ redirect_link }}</ULink>
+                    <p>{{ props.redirectText }} <ULink raw :to=props.linkTo active-class="font-bold"
+                            inactive-class="text-muted">
+                            {{ props.redirectLink }}</ULink>
                     </p>
                 </div>
             </div>
