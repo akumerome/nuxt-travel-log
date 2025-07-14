@@ -1,34 +1,13 @@
 <script lang="ts" setup>
-import { z } from "zod";
+import { schema } from "~/shared/utils/validators/signup";
+import type { Schema } from "~/shared/utils/validators/signup";
 import type { FormSubmitEvent } from "@nuxt/ui";
+import { FetchError } from "ofetch";
 
 const { fetch: refreshSession } = useUserSession();
-const error = ref<string | null>(null)
-
-const schema = z
-    .object({
-        username: z.string().nonempty("The username field is required."),
-        email: z
-            .string()
-            .nonempty("The email field is required.")
-            .email("The email field must be a valid email address."),
-        password: z
-            .string()
-            .nonempty("The password field is required.")
-            .min(8, "The password field must be at least 8 characters.")
-            .regex(/^(?=.*[a-z])/, "The password field must include at least a lowercase character.")
-            .regex(/^(?=.*[A-Z])/, "The password field must include at least an uppercase character.")
-            .regex(/^(?=.*\d)/, "The password field must include at least a number.")
-            .regex(/^(?=.*[\W_])/, "The password field must include at least a special character."),
-
-        password_confirmation: z.string(),
-    })
-    .refine((data) => data.password === data.password_confirmation, {
-        message: "Passwords do not match.",
-        path: ["password_confirmation"],
-    });
-
-type Schema = z.output<typeof schema>;
+const { $csrfFetch } = useNuxtApp();
+const form = useTemplateRef("form");
+const error = ref<string | null>(null);
 
 const state = reactive<Partial<Schema>>({
     username: undefined,
@@ -40,7 +19,7 @@ const state = reactive<Partial<Schema>>({
 async function onSubmit(event: FormSubmitEvent<Schema>) {
     error.value = null;
     try {
-        await $fetch("/api/signup", {
+        await $csrfFetch("/api/signup", {
             method: "POST",
             body: event.data,
         });
@@ -49,14 +28,17 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         await refreshSession();
         await navigateTo("/dashboard");
     } catch (e) {
-        console.error("Sign up error:", e.statusMessage);
-        error.value = e.statusMessage || "An error occured";
+        const fetchError = e as FetchError;
+        if (fetchError.data?.data) {
+            form.value?.setErrors(fetchError.data.data);
+        }
+        error.value = fetchError.statusMessage || "An error occured";
     }
 }
 </script>
 
 <template>
-<UForm :schema="schema" :state="state" class="space-y-3" @submit="onSubmit">
+<UForm ref="form" :schema :state class="space-y-3" @submit="onSubmit">
 
     <UFormField label="Username" name="username">
         <UInput v-model="state.username" class="w-full" color="neutral" placeholder="username" />

@@ -15,6 +15,7 @@
     "mongoose": "^8.16.1",
     "nuxt": "^3.17.6",
     "nuxt-auth-utils": "^0.5.20",
+    "nuxt-csurf": "^1.6.5",
     "tailwindcss": "^4.1.11",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1",

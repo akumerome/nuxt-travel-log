@@ -1,16 +1,13 @@
 <script lang="ts" setup>
-import { z } from "zod";
+import { schema } from "~/shared/utils/validators/login";
+import type { Schema } from "~/shared/utils/validators/login";
 import type { FormSubmitEvent } from "@nuxt/ui";
+import { FetchError } from "ofetch";
 
 const { fetch: refreshSession } = useUserSession();
-const error = ref<string | null>(null)
-
-const schema = z.object({
-    email: z.string().nonempty("The email field is required.").email("The email field must be a valid email address."),
-    password: z.string().nonempty("The password field is required."),
-});
-
-type Schema = z.output<typeof schema>;
+const { $csrfFetch } = useNuxtApp();
+const form = useTemplateRef("form");
+const error = ref<string | null>(null);
 
 const state = reactive<Partial<Schema>>({
     email: undefined,
@@ -20,7 +17,7 @@ const state = reactive<Partial<Schema>>({
 async function onSubmit(event: FormSubmitEvent<Schema>) {
     error.value = null;
     try {
-        await $fetch("/api/login", {
+        await $csrfFetch("/api/login", {
             method: "POST",
             body: event.data,
         });
@@ -29,14 +26,17 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         await refreshSession();
         await navigateTo("/dashboard");
     } catch (e) {
-        console.error("Log in error:", e.statusMessage);
-        error.value = e.statusMessage || "An error occured";
+        const fetchError = e as FetchError;
+        if (fetchError.data?.data) {
+            form.value?.setErrors(fetchError.data.data);
+        }
+        error.value = fetchError.statusMessage || "An error occured";
     }
 }
 </script>
 
 <template>
-<UForm :schema="schema" :state="state" class="space-y-3" @submit="onSubmit">
+<UForm ref="form" :schema :state class="space-y-3" @submit="onSubmit">
     <UFormField label="Email" name="email">
         <UInput v-model="state.email" class="w-full" color="neutral" placeholder="@travellog.com" />
     </UFormField>
