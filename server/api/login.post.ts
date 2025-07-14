@@ -1,41 +1,52 @@
-import { z } from "zod";
+import { schema } from "~/shared/utils/validators/login";
+import { formatBodyValidationErrors } from "../utils/body-validation-error-formatter";
 import { User } from "../models/User";
 
-const bodySchema = z.object({
-  email: z.string().email(),
-  password: z.string(),
-});
-
 export default defineEventHandler(async (event) => {
-  const { email, password } = await readValidatedBody(event, bodySchema.parse);
+  const result = await readValidatedBody(event, schema.safeParse);
+
+  if (!result.success) {
+
+    const data = formatBodyValidationErrors(result);
+
+    return sendError(event, createError({
+      statusCode: 422,
+      statusMessage: "Invalid submitted data.",
+      data,
+    }));
+  }
+
+  const { email, password } = result.data;
 
   const user = await User.findOne({ email: email });
 
   if (!user) {
-    throw createError({
+    return sendError(event, createError({
       statusCode: 401,
       statusMessage: "Email or password is incorrect.",
-    });
+    }));
   }
 
   const isAuthenticated = await verifyPassword(user.password, password);
 
   if (!isAuthenticated) {
-    throw createError({
+    return sendError(event, createError({
       statusCode: 401,
       statusMessage: "Email or password is incorrect.",
-    });
+    }));
   }
 
-  // set the user session in the cookie
+  // Set the user session in the cookie
   await setUserSession(event, {
     user: {
+      _id: user._id,
       username: user.username,
+      email: user.email,
     },
   });
 
   return {
+    statusCode: 200,
     statusMessage: "User logged in successfully.",
-    user: { name: user.name, email: user.email },
   };
 });

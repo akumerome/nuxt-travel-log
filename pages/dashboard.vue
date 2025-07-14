@@ -6,9 +6,9 @@ definePageMeta({
 
 <template>
 <div class="flex-1 flex">
-    <div class="flex">
-        <Sidebar></Sidebar>
-        <div class="flex-1"> MAPA</div>
+    <Sidebar></Sidebar>
+    <div class="flex-1">
+        <NuxtPage></NuxtPage>
     </div>
 </div>
 </template>

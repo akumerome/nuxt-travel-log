@@ -3,12 +3,20 @@
 
 @font-face {
   font-family: "Metropolis";
-    src: local("Metropolis"),
-     url(assets/fonts/Metropolis/Metropolis-Regular.otf) format("truetype");
+  src: local("Metropolis"),
+    url(assets/fonts/Metropolis/Metropolis-Regular.otf) format("truetype");
 }
 
 body {
   font-family: "Metropolis";
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+  display: none;
+}
+
+input[type="number"]::-webkit-outer-spin-button {
+  display: none;
 }
 
 @theme static {
