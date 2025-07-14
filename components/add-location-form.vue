@@ -4,6 +4,7 @@ import type { Schema } from "~/shared/utils/validators/locations";
 import type { FormSubmitEvent } from "@nuxt/ui";
 import { FetchError } from "ofetch";
 
+const { $csrfFetch } = useNuxtApp();
 const form = useTemplateRef("form");
 const submitted = ref(false);
 const error = ref<string | null>(null);
@@ -18,7 +19,7 @@ const state = reactive<Partial<Schema>>({
 async function onSubmit(event: FormSubmitEvent<Schema>) {
     error.value = null;
     try {
-        const inserted = await $fetch("/api/locations", {
+        const inserted = await $csrfFetch("/api/locations", {
             method: "POST",
             body: event.data,
         });

@@ -5,8 +5,9 @@ import type { FormSubmitEvent } from "@nuxt/ui";
 import { FetchError } from "ofetch";
 
 const { fetch: refreshSession } = useUserSession();
-const error = ref<string | null>(null);
+const { $csrfFetch } = useNuxtApp();
 const form = useTemplateRef("form");
+const error = ref<string | null>(null);
 
 const state = reactive<Partial<Schema>>({
     username: undefined,
@@ -18,7 +19,7 @@ const state = reactive<Partial<Schema>>({
 async function onSubmit(event: FormSubmitEvent<Schema>) {
     error.value = null;
     try {
-        await $fetch("/api/signup", {
+        await $csrfFetch("/api/signup", {
             method: "POST",
             body: event.data,
         });
