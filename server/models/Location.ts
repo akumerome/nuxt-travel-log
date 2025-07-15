@@ -1,10 +1,21 @@
 import mongoose from "mongoose";
 
+interface Location {
+  name: string;
+  slug: string;
+  description?: string;
+  lat: number;
+  long: number;
+  user: mongoose.Schema.Types.ObjectId;
+  created_at: number;
+  updated_at: number;
+}
+
 const options = {
   collection: "location",
 };
 
-const LocationSchema = new mongoose.Schema(
+const LocationSchema = new mongoose.Schema<Location>(
   {
     name: {
       type: String,

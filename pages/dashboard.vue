@@ -7,7 +7,7 @@ definePageMeta({
 <template>
 <div class="flex-1 flex">
     <Sidebar></Sidebar>
-    <div class="flex-1">
+    <div class="flex-1 flex">
         <NuxtPage></NuxtPage>
     </div>
 </div>
