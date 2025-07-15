@@ -44,6 +44,9 @@ const LocationSchema = new mongoose.Schema(
   options
 );
 
+// The combination of slug and user must be unique (composite key)
+LocationSchema.index({ slug: 1, user: 1 }, { unique: true });
+
 // Update updated_at on save
 LocationSchema.pre("save", function (next) {
   this.updated_at = Math.floor(Date.now() / 1000);
