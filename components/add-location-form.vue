@@ -23,8 +23,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             method: "POST",
             body: event.data,
         });
-
-        console.log("inserted", inserted);
         submitted.value = true;
         navigateTo("/dashboard");
     } catch (e) {

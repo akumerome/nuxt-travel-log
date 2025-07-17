@@ -2,6 +2,15 @@
 definePageMeta({
     middleware: ["auth"],
 });
+
+const route = useRoute();
+const locationsStore = useLocationsStore();
+
+onMounted(() => {
+    if (route.path !== "/dashboard") {
+        locationsStore.refresh();
+    }
+});
 </script>
 
 <template>
