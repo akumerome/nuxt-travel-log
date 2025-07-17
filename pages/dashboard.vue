@@ -16,8 +16,9 @@ onMounted(() => {
 <template>
 <div class="flex-1 flex">
     <Sidebar></Sidebar>
-    <div class="flex-1 flex">
+    <div class="flex-1 flex flex-col gap-4">
         <NuxtPage></NuxtPage>
+        <Map class="flex-1"></Map>
     </div>
 </div>
 </template>
