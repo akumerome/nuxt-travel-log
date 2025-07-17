@@ -40,7 +40,7 @@ export default defineEventHandler(async (event) => {
     await created.save();
 
     return {
-      statusCode: 200,
+      statusCode: 201,
       statusMessage: "Location added successfully.",
     };
 
