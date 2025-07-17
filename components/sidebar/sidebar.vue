@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+const sidebarLocationsStore = useSidebarLocationsStore();
 const open = ref<boolean>(false);
 
 onMounted(() => {
@@ -35,8 +36,22 @@ function toggleSidebar() {
             :ui="{ base: 'px-2.5 py-2.5', trailingIcon: 'size-[var(--sidebar-icon-size)]' }" />
     </div>
     <nav class="flex flex-col gap-1">
-        <SidebarButton v-for="item in navItems" :item="item" :showLabel="open">
+        <SidebarButton v-for="item in navItems" :key="item.href" :item="item" :showLabel="open">
         </SidebarButton>
+        <ClientOnly>
+            <USeparator v-if="sidebarLocationsStore.sidebarLocationsItems.length" />
+        </ClientOnly>
+        <div v-if="sidebarLocationsStore.loading" class="flex flex-col gap-1">
+            <USkeleton v-for="x in 3" class="bg-accented h-[var(--collapsed-sidebar-element-size)] w-full" />
+        </div>
+        <ClientOnly>
+            <div v-if="!sidebarLocationsStore.loading && sidebarLocationsStore.sidebarLocationsItems.length"
+                class="flex flex-col gap-1">
+                <SidebarButton v-for="item in sidebarLocationsStore.sidebarLocationsItems" :key="item.href" :item="item"
+                    :showLabel="open">
+                </SidebarButton>
+            </div>
+        </ClientOnly>
     </nav>
 </aside>
 </template>
