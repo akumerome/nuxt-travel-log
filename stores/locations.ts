@@ -5,7 +5,7 @@ export const useLocationsStore = defineStore("useLocationsStore", () => {
 
     const sidebarLocationsStore = useSidebarLocationsStore();
 
-    watchEffect(() => {
+    effect(() => {
         if (data.value) {
             sidebarLocationsStore.sidebarLocationsItems = data.value.data.locations.map((location) => ({
                 href: `/${location.slug}`,
