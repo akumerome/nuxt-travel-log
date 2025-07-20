@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const sidebarLocationsStore = useSidebarLocationsStore();
+const locationsStore = useLocationsStore();
 const open = ref<boolean>(false);
 
 onMounted(() => {
@@ -36,16 +36,19 @@ function toggleSidebar() {
             :ui="{ base: 'px-2.5 py-2.5', trailingIcon: 'size-[var(--sidebar-icon-size)]' }" />
     </div>
     <nav class="flex flex-col gap-1">
-        <SidebarButton v-for="item in navItems" :key="item.href" :item="item" :showLabel="open">
+        <SidebarButton v-for="item in navItems" :key="item.href" :href="item.href" :icon="item.icon" :label="item.label"
+            :showLabel="open">
         </SidebarButton>
-        <USeparator v-if="sidebarLocationsStore.sidebarLocationsItems.length" />
-        <div v-if="sidebarLocationsStore.loading" class="flex flex-col gap-1">
+        <USeparator v-if="locationsStore.locations.length" />
+        <div v-if="locationsStore.status === 'pending'" class="flex flex-col gap-1">
             <USkeleton v-for="x in 3" class="bg-accented h-[var(--collapsed-sidebar-element-size)] w-full" />
         </div>
-        <div v-if="!sidebarLocationsStore.loading && sidebarLocationsStore.sidebarLocationsItems.length"
-            class="flex flex-col gap-1">
-            <SidebarButton v-for="item in sidebarLocationsStore.sidebarLocationsItems" :key="item.href" :item="item"
-                :showLabel="open">
+        <div v-if="locationsStore.status === 'success' && locationsStore.locations.length" class="flex flex-col gap-1">
+            <SidebarButton v-for="location in locationsStore.locations"
+                :class="[locationsStore.selectedLocation === location ? 'text-primary' : undefined]"
+                :key="`/${location.slug}`" :href="`/${location.slug}`" icon="i-lucide-map-pin" :label="location.name"
+                :showLabel="open" @mouseenter="locationsStore.selectedLocation = location"
+                @mouseleave="locationsStore.selectedLocation = null">
             </SidebarButton>
         </div>
     </nav>

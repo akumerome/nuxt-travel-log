@@ -17,10 +17,13 @@ onMounted(() => {
             <AppLoader />
         </div>
         <div v-else-if="locations?.length" class="flex gap-4">
-            <UCard class="bg-muted w-72 shadow-xl rounded-md shrink-0" v-for="location in locations"
-                :ui="{ body: 'sm:p-4' }">
+            <UCard class="bg-muted w-72 shadow-xl rounded-md shrink-0 border-2"
+                :class="[location === locationsStore.selectedLocation ? 'border-primary' : 'border-transparent']"
+                v-for="location in locations" :ui="{ body: 'sm:p-4' }"
+                @mouseenter="locationsStore.selectedLocation = location"
+                @mouseleave="locationsStore.selectedLocation = null">
                 <div class="h-16 w-72">
-                    <div class="text-lg font-bold">{{ location.name }}</div>
+                    <div class="font-bold truncate">{{ location.name }}</div>
                     <div class="text-sm line-clamp-2">{{ location.description }}</div>
                 </div>
             </UCard>
@@ -34,25 +37,3 @@ onMounted(() => {
     </div>
 </div>
 </template>
-
-<style>
-.scroll-container::-webkit-scrollbar {
-    width: 12px;
-    /* vertical scrollbar */
-    height: 4px;
-    /* horizontal scrollbar */
-}
-
-.scroll-container::-webkit-scrollbar-thumb {
-    background-color: #314158;
-    border-radius: 6px;
-}
-
-.scroll-container::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
-
-.dark .scroll-container::-webkit-scrollbar-thumb {
-    background-color: #e2e8f0;
-}
-</style>

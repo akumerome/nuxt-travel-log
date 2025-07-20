@@ -1,26 +1,17 @@
+import type { Location } from "~/types/types";
+
 export const useLocationsStore = defineStore("useLocationsStore", () => {
     const { data, status, refresh } = useFetch("/api/locations", {
         lazy: true,
     });
 
-    const sidebarLocationsStore = useSidebarLocationsStore();
-
-    effect(() => {
-        if (data.value) {
-            sidebarLocationsStore.sidebarLocationsItems = data.value.data.locations.map((location) => ({
-                href: `/${location.slug}`,
-                icon: "i-lucide-map-pin",
-                label: location.name
-            }));
-            sidebarLocationsStore.loading = status.value === "pending";
-        }
-    });
-
     const locations = computed(() => data.value?.data?.locations ?? []);
+    const selectedLocation = ref<Location | null>(null);
 
     return {
         locations,
         status,
-        refresh
+        refresh,
+        selectedLocation,
     }
 });
