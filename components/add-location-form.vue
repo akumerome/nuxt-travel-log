@@ -4,6 +4,7 @@ import type { Schema } from "~/shared/utils/validators/locations";
 import type { FormSubmitEvent } from "@nuxt/ui";
 import { FetchError } from "ofetch";
 
+const locationsStore = useLocationsStore();
 const { $csrfFetch } = useNuxtApp();
 const form = useTemplateRef("form");
 const submitted = ref(false);
@@ -47,6 +48,13 @@ onBeforeRouteLeave(() => {
         return true;
     }
 });
+
+effect(() => {
+    if (locationsStore.addedLocation) {
+        state.lat = locationsStore.addedLocation.lat;
+        state.long = locationsStore.addedLocation.long;
+    }
+});
 </script>
 
 <template>
@@ -60,13 +68,24 @@ onBeforeRouteLeave(() => {
             :maxrows="6" autoresize />
     </UFormField>
 
-    <UFormField label="Latitude" name="lat">
-        <UInput v-model="state.lat" class="w-full" color="neutral" type="number" placeholder="48.853" />
-    </UFormField>
+    <div class="flex gap-3">
+        <div
+            class="place-self-end rounded-md font-medium inline-flex items-center text-sm gap-1.5 ring ring-inset ring-accented text-default bg-default p-1.5">
+            <UIcon name="i-tabler-map-pin-filled" class="size-5 shrink-0 text-secondary">
+            </UIcon>
+        </div>
 
-    <UFormField label="Longitude" name="long">
-        <UInput v-model="state.long" class="w-full" color="neutral" type="number" placeholder="2.348" />
-    </UFormField>
+        <UFormField label="Latitude" name="lat" class="flex-1">
+            <UInput v-model="state.lat" class="w-full" color="neutral" type="number" placeholder="48.853" disabled
+                :ui="{ base: 'disabled:cursor-default' }" />
+        </UFormField>
+
+        <UFormField label="Longitude" name="long" class="flex-1">
+            <UInput v-model="state.long" class="w-full" color="neutral" type="number" placeholder="2.348" disabled
+                :ui="{ base: 'disabled:cursor-default' }" />
+        </UFormField>
+    </div>
+
 
     <div class="mt-4 grid">
         <UAlert v-if="error" class="mb-4" color="error" icon="i-tabler-circle-x" :title="error" />
