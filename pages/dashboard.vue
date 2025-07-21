@@ -17,7 +17,7 @@ onMounted(() => {
 <div class="flex-1 flex">
     <Sidebar></Sidebar>
     <div class="flex-1 overflow-auto">
-        <div class="flex flex-col size-full">
+        <div class="flex size-full" :class="[route.path !== '/dashboard/add' ? 'flex-col' : undefined]">
             <NuxtPage></NuxtPage>
             <Map class="flex-1"></Map>
         </div>

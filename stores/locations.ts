@@ -7,11 +7,13 @@ export const useLocationsStore = defineStore("useLocationsStore", () => {
 
     const locations = computed(() => data.value?.data?.locations ?? []);
     const selectedLocation = ref<Location | null>(null);
+    const addedLocation = ref<Location | null>(null);
 
     return {
         locations,
         status,
         refresh,
         selectedLocation,
+        addedLocation,
     }
 });
