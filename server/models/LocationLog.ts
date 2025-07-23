@@ -1,10 +1,13 @@
 import mongoose from "mongoose";
+import type { ILocationLog } from "~/types/types";
+
+type LocationLogDocument = ILocationLog & mongoose.Document;
 
 const options = {
   collection: "location_log",
 };
 
-const LocationLogSchema = new mongoose.Schema(
+const LocationLogSchema = new mongoose.Schema<LocationLogDocument>(
   {
     name: {
       type: String,
@@ -57,6 +60,8 @@ LocationLogSchema.pre("save", function (next) {
   next();
 });
 
-export const Location =
-  mongoose.models.LocationLog ||
-  mongoose.model("LocationLog", LocationLogSchema);
+// export const LocationLog =
+//   mongoose.models.LocationLog ||
+//   mongoose.model("LocationLog", LocationLogSchema);
+
+export const LocationLog = mongoose.models.LocationLog as mongoose.Model<LocationLogDocument> || mongoose.model<LocationLogDocument>('LocationLog', LocationLogSchema);

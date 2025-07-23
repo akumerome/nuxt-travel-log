@@ -1,21 +1,13 @@
 import mongoose from "mongoose";
+import type { ILocation } from "~/types/types";
 
-interface Location {
-  name: string;
-  slug: string;
-  description?: string;
-  lat: number;
-  long: number;
-  user: mongoose.Schema.Types.ObjectId;
-  created_at: number;
-  updated_at: number;
-}
+type LocationDocument = ILocation & mongoose.Document;
 
 const options = {
   collection: "location",
 };
 
-const LocationSchema = new mongoose.Schema<Location>(
+const LocationSchema = new mongoose.Schema<LocationDocument>(
   {
     name: {
       type: String,
@@ -39,6 +31,10 @@ const LocationSchema = new mongoose.Schema<Location>(
       type: Number,
       required: true,
     },
+    location_logs: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'LocationLog'
+    }],
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -64,5 +60,8 @@ LocationSchema.pre("save", function (next) {
   next();
 });
 
-export const Location =
-  mongoose.models.Location || mongoose.model("Location", LocationSchema);
+// export const Location =
+//   mongoose.models.Location || mongoose.model("Location", LocationSchema);
+
+export const Location = mongoose.models.Location as mongoose.Model<LocationDocument> || mongoose.model<LocationDocument>('Location', LocationSchema);
+

@@ -37,6 +37,6 @@ LocationLogImageSchema.pre("save", function (next) {
   next();
 });
 
-export const Location =
+export const LocationLogImage =
   mongoose.models.LocationLogImage ||
   mongoose.model("LocationLogImage", LocationLogImageSchema);

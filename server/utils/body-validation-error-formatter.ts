@@ -1,5 +1,5 @@
 import { resolveNuxtModule } from "nuxt/kit";
-import { SafeParseError } from "zod";
+import type { SafeParseError } from "zod";
 
 // export function formatBodyValidationErrors(result: SafeParseError<unknown>) {
 //     const statusMessage = result

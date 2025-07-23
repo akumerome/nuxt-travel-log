@@ -1,0 +1,1 @@
+export const CENTER_WORLD = [0.1, 0.1] as [number, number];
