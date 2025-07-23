@@ -4,7 +4,7 @@ import type { Schema } from "~/shared/utils/validators/locations";
 import type { FormSubmitEvent } from "@nuxt/ui";
 import { FetchError } from "ofetch";
 
-const locationsStore = useLocationsStore();
+const mapStore = useMapStore();
 const { $csrfFetch } = useNuxtApp();
 const form = useTemplateRef("form");
 const submitted = ref(false);
@@ -50,9 +50,9 @@ onBeforeRouteLeave(() => {
 });
 
 effect(() => {
-    if (locationsStore.addedLocation) {
-        state.lat = locationsStore.addedLocation.lat;
-        state.long = locationsStore.addedLocation.long;
+    if (mapStore.addedPoint) {
+        state.lat = mapStore.addedPoint.lat;
+        state.long = mapStore.addedPoint.long;
     }
 });
 </script>

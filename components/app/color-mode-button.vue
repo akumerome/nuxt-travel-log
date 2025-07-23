@@ -8,10 +8,10 @@ const isDark = computed({
     set(value) {
         colorMode.preference = value ? 'dark' : 'light'
     }
-})
+});
 </script>
 
 <template>
-    <UButton :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'" color="neutral" variant="outline"
-        @click="isDark = !isDark" />
+<UButton :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'" color="neutral" variant="outline"
+    @click="isDark = !isDark" />
 </template>

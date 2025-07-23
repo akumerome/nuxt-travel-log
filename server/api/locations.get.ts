@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
         // This will throw a 401 error if the request doesn't come from a valid user session
         const { user } = await requireUserSession(event);
 
-        const locations = await Location.find({ user: user._id });
+        const locations = await Location.find({ user: user._id }).lean();
 
         return {
             statusCode: 200,

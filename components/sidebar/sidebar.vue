@@ -1,5 +1,8 @@
 <script lang="ts" setup>
+
 const locationsStore = useLocationsStore();
+const mapStore = useMapStore();
+const sidebarStore = useSidebarStore();
 const open = ref<boolean>(false);
 
 onMounted(() => {
@@ -39,16 +42,15 @@ function toggleSidebar() {
         <SidebarButton v-for="item in navItems" :key="item.href" :href="item.href" :icon="item.icon" :label="item.label"
             :showLabel="open">
         </SidebarButton>
-        <USeparator v-if="locationsStore.locations.length" />
-        <div v-if="locationsStore.status === 'pending'" class="flex flex-col gap-1">
+        <USeparator v-if="sidebarStore.sidebarItems.length" />
+        <div v-if="sidebarStore.loading" class="flex flex-col gap-1">
             <USkeleton v-for="x in 3" class="bg-accented h-[var(--collapsed-sidebar-element-size)] w-full" />
         </div>
-        <div v-if="locationsStore.status === 'success' && locationsStore.locations.length" class="flex flex-col gap-1">
-            <SidebarButton v-for="location in locationsStore.locations"
-                :class="[locationsStore.selectedLocation === location ? 'text-primary' : undefined]"
-                :key="`/${location.slug}`" :href="`/${location.slug}`" icon="i-lucide-map-pin" :label="location.name"
-                :showLabel="open" @mouseenter="locationsStore.selectedLocation = location"
-                @mouseleave="locationsStore.selectedLocation = null">
+        <div v-if="!sidebarStore.loading && sidebarStore.sidebarItems.length" class="flex flex-col gap-1">
+            <SidebarButton v-for="item in sidebarStore.sidebarItems"
+                :class="[isPointSelected(item.mapPoint, mapStore.selectedPoint) ? 'text-primary' : undefined]"
+                :key="item._id" :href="item.href" :icon="item.icon" :label="item.label" :showLabel="open"
+                @mouseenter="mapStore.selectedPoint = item.mapPoint" @mouseleave="mapStore.selectedPoint = null">
             </SidebarButton>
         </div>
     </nav>
