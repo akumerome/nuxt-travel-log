@@ -9,7 +9,7 @@ const items = ref<DropdownMenuItem[]>([
     },
     {
         label: 'Log out',
-        icon: 'i-lucide-log-out',
+        icon: 'i-tabler-logout',
         onSelect() {
             navigateTo('/logout');
         }

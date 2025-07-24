@@ -23,7 +23,7 @@ const active = computed(() => route.path === props.href);
             active ? 'bg-accented' : undefined,
         ]">
         <UIcon class="shrink-0 size-[var(--sidebar-icon-size)]" :name="icon" />
-        <span class="font-bold truncate transition-[opacity] duration-1000 ease-in-out tracking-wide"
+        <span class="font-bold truncate transition-[opacity] duration-1000 ease-in-out tracking-wide text-sm"
             :class="[showLabel ? 'opacity-100' : 'opacity-0']">
             {{ label }}
         </span>
