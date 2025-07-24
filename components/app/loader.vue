@@ -1,3 +1,3 @@
 <template>
-<UIcon class="size-8 animate-spin" name="i-lucide-loader-circle"></UIcon>
+<UIcon class="size-8 animate-spin" name="i-tabler-loader-2"></UIcon>
 </template>

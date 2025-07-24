@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 
-const locationsStore = useLocationsStore();
 const mapStore = useMapStore();
 const sidebarStore = useSidebarStore();
 const open = ref<boolean>(false);
@@ -8,19 +7,6 @@ const open = ref<boolean>(false);
 onMounted(() => {
     open.value = localStorage.getItem("isSidebarOpen") === "true";
 });
-
-const navItems = [
-    {
-        href: '/dashboard',
-        icon: 'i-lucide-map',
-        label: 'Locations',
-    },
-    {
-        href: '/dashboard/add',
-        icon: 'i-lucide-map-pin-plus',
-        label: 'Add location',
-    },
-];
 
 function toggleSidebar() {
     open.value = !open.value;
@@ -35,12 +21,12 @@ function toggleSidebar() {
         <UButton
             class="size-[var(--collapsed-sidebar-element-size)] transition-transform duration-500 ease out hover:bg-accented focus-visible:bg-accented"
             :class="[open ? 'rotate-180' : 'rotate-0']" color="neutral" variant="ghost"
-            trailing-icon="i-lucide-chevron-right" @click="toggleSidebar"
+            trailing-icon="i-tabler-chevron-right" @click="toggleSidebar"
             :ui="{ base: 'px-2.5 py-2.5', trailingIcon: 'size-[var(--sidebar-icon-size)]' }" />
     </div>
     <nav class="flex flex-col gap-1">
-        <SidebarButton v-for="item in navItems" :key="item.href" :href="item.href" :icon="item.icon" :label="item.label"
-            :showLabel="open">
+        <SidebarButton v-for="item in sidebarStore.sidebarTopItems" :key="item.href" :href="item.href" :icon="item.icon"
+            :label="item.label" :showLabel="open">
         </SidebarButton>
         <USeparator v-if="sidebarStore.sidebarItems.length" />
         <div v-if="sidebarStore.loading" class="flex flex-col gap-1">
@@ -50,7 +36,8 @@ function toggleSidebar() {
             <SidebarButton v-for="item in sidebarStore.sidebarItems"
                 :class="[isPointSelected(item.mapPoint, mapStore.selectedPoint) ? 'text-primary' : undefined]"
                 :key="item._id" :href="item.href" :icon="item.icon" :label="item.label" :showLabel="open"
-                @mouseenter="mapStore.selectedPoint = item.mapPoint" @mouseleave="mapStore.selectedPoint = null">
+                @mouseenter="mapStore.selectedPoint = item.mapPoint ?? null"
+                @mouseleave="mapStore.selectedPoint = null">
             </SidebarButton>
         </div>
     </nav>

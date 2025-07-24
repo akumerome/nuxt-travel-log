@@ -1,20 +1,11 @@
 <script lang="ts" setup>
-import type { SuccessfulLocationResponse } from "~/types/types";
 
-const route = useRoute();
-const mapStore = useMapStore();
+const locationsStore = useLocationsStore();
+const { currentLocation: data, currentLocationStatus: status, currentLocationError: error } = storeToRefs(locationsStore);
 
-const { slug } = route.params;
-const { data, status, error } = await useFetch<SuccessfulLocationResponse>(`/api/locations/${slug}`, {
-    lazy: true
+onMounted(() => {
+    locationsStore.refreshCurrentLocation();
 });
-
-effect(() => {
-    if (data.value) {
-        mapStore.mapPoints = [data.value.data.location];
-    }
-});
-
 </script>
 
 <template>
@@ -29,7 +20,7 @@ effect(() => {
         </div>
         <div v-if="!data.data.location.location_logs.length" class="flex flex-col justify-center items-center gap-2">
             <p class="text-sm text-dimmed">{{ data.data.location.name }} has no location logs yet!</p>
-            <UButton color="neutral" size="lg" to="/dashboard/add" trailing-icon="i-lucide-map-pin-plus">Add
+            <UButton color="neutral" size="lg" to="/dashboard/add" trailing-icon="i-tabler-map-pin-plus">Add
                 location log
             </UButton>
         </div>

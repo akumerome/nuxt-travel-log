@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 const locationsStore = useLocationsStore();
-const { data, status } = storeToRefs(locationsStore);
+const { locations: data, locationsStatus: status } = storeToRefs(locationsStore);
 const mapStore = useMapStore();
 
 onMounted(() => {
-    locationsStore.refresh();
+    locationsStore.refreshLocations();
 })
 </script>
 
@@ -32,7 +32,7 @@ onMounted(() => {
         </div>
         <div v-else class="flex-1 flex flex-col justify-center items-center gap-2">
             <p class="text-sm text-dimmed">Add a location to get started.</p>
-            <UButton color="neutral" size="lg" to="/dashboard/add" trailing-icon="i-lucide-map-pin-plus">Add
+            <UButton color="neutral" size="lg" to="/dashboard/add" trailing-icon="i-tabler-map-pin-plus">Add
                 location
             </UButton>
         </div>
