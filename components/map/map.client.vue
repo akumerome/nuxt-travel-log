@@ -36,20 +36,6 @@ onMounted(() => {
 <div class="m-4 rounded-lg overflow-hidden">
     <MglMap :map-style="style" :center="CENTER_WORLD" :zoom="zoom" @map:dblclick="onDoubleClick">
         <MglNavigationControl />
-        <MglMarker v-if="mapStore.addedPoint" draggable
-            :coordinates="[mapStore.addedPoint.long, mapStore.addedPoint.lat]" @update:coordinates="updateAddedPoint">
-            <template v-slot:marker>
-                <UTooltip :content="{
-                    align: 'center',
-                    side: 'top',
-                    sideOffset: 4,
-                }" text="Drag me to your desired location" default-open>
-                    <UIcon name="i-tabler-map-pin-filled" class="size-8 text-secondary">
-                    </UIcon>
-                </UTooltip>
-            </template>
-
-        </MglMarker>
         <MglMarker v-for="point in mapStore.mapPoints" :key="point._id" :coordinates="[point.long, point.lat]">
             <template v-slot:marker>
                 <NuxtLink :to="point.to">
@@ -64,6 +50,19 @@ onMounted(() => {
                         </UIcon>
                     </UTooltip>
                 </NuxtLink>
+            </template>
+        </MglMarker>
+        <MglMarker v-if="mapStore.addedPoint" draggable
+            :coordinates="[mapStore.addedPoint.long, mapStore.addedPoint.lat]" @update:coordinates="updateAddedPoint">
+            <template v-slot:marker>
+                <UTooltip :content="{
+                    align: 'center',
+                    side: 'top',
+                    sideOffset: 4,
+                }" text="Drag me to your desired location" default-open>
+                    <UIcon name="i-tabler-map-pin-filled" class="size-8 text-secondary">
+                    </UIcon>
+                </UTooltip>
             </template>
         </MglMarker>
     </MglMap>

@@ -17,15 +17,15 @@ export const useMapStore = defineStore("useMapStore", () => {
 
         effect(() => {
             const firstPoint = mapPoints.value[0];
-            if (!firstPoint)
+            if (!firstPoint) {
                 return;
+            }
 
             bounds = calculateLocationsBounds();
 
             if (addedPoint.value) {
                 calculateCenter();
             }
-
 
             map.map?.fitBounds(bounds, {
                 padding,

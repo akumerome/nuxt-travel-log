@@ -4,28 +4,31 @@ import type { Schema } from "~/shared/utils/validators/locations";
 import type { FormSubmitEvent } from "@nuxt/ui";
 import { FetchError } from "ofetch";
 
+const route = useRoute();
 const mapStore = useMapStore();
 const { $csrfFetch } = useNuxtApp();
 const form = useTemplateRef("form");
 const submitted = ref(false);
 const error = ref<string | null>(null);
+const locationsStore = useLocationsStore();
 
 const state = reactive<Partial<Schema>>({
-    name: undefined,
-    description: undefined,
-    lat: undefined,
-    long: undefined,
+    name: locationsStore.currentLocation?.data.location?.name,
+    description: locationsStore.currentLocation?.data.location?.description,
+    lat: locationsStore.currentLocation?.data.location?.lat,
+    long: locationsStore.currentLocation?.data.location?.long,
 });
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
     error.value = null;
     try {
-        const inserted = await $csrfFetch("/api/locations", {
-            method: "POST",
+        const edited = await $csrfFetch(`/api/locations/${route.params.slug}`, {
+            method: "PUT",
             body: event.data,
         });
+
         submitted.value = true;
-        navigateTo("/dashboard");
+        await navigateTo(`/dashboard/location/${edited.data.location.slug}`);
     } catch (e) {
         const fetchError = e as FetchError;
         if (fetchError.data?.data) {
@@ -60,8 +63,8 @@ onMounted(() => {
     mapStore.addedPoint = {
         _id: "1",
         name: "Added Point",
-        lat: 0.1,
-        long: 0.1,
+        lat: locationsStore.currentLocation?.data.location?.lat || 0.1,
+        long: locationsStore.currentLocation?.data.location?.long || 0.1,
     }
 });
 
@@ -103,7 +106,7 @@ onUnmounted(() => {
     <div class="mt-4 grid">
         <UAlert v-if="error" class="mb-4" color="error" icon="i-tabler-circle-x" :title="error" />
 
-        <UButton class="justify-self-end" color="neutral" loading-auto type="submit">Add location
+        <UButton class="justify-self-end" color="neutral" loading-auto type="submit">Edit location
         </UButton>
     </div>
 </UForm>

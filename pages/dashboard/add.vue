@@ -1,20 +1,3 @@
-<script lang="ts" setup>
-const mapStore = useMapStore();
-
-onMounted(() => {
-    mapStore.addedPoint = {
-        _id: "1",
-        name: "Added Point",
-        lat: 0.1,
-        long: 0.1,
-    }
-});
-
-onUnmounted(() => {
-    mapStore.addedPoint = null;
-});
-</script>
-
 <template>
 <div class="max-w-lg m-4">
     <div class="mb-4">

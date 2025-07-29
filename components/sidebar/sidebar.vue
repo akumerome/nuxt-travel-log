@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 
+const route = useRoute();
+const locationsStore = useLocationsStore();
 const mapStore = useMapStore();
 const sidebarStore = useSidebarStore();
 const open = ref<boolean>(false);
@@ -28,6 +30,10 @@ function toggleSidebar() {
         <SidebarButton v-for="item in sidebarStore.sidebarTopItems" :key="item.href" :href="item.href" :icon="item.icon"
             :label="item.label" :showLabel="open">
         </SidebarButton>
+        <div v-if="route.path.startsWith('/dashboard/location') && locationsStore.currentLocationStatus === 'pending'"
+            class="flex flex-col gap-1">
+            <USkeleton v-for="x in 3" class="bg-accented h-[var(--collapsed-sidebar-element-size)] w-full" />
+        </div>
         <USeparator v-if="sidebarStore.sidebarItems.length" />
         <div v-if="sidebarStore.loading" class="flex flex-col gap-1">
             <USkeleton v-for="x in 3" class="bg-accented h-[var(--collapsed-sidebar-element-size)] w-full" />

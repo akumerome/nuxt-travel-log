@@ -9,8 +9,10 @@ export function createMapPointFromLocation(location: ILocation): MapPoint {
 }
 
 export function isPointSelected(item: Pick<MapPoint, "_id" | "lat" | "long"> | null | undefined, selectedPoint: MapPoint | null | undefined) {
-    if (!item || !selectedPoint)
+    if (!item || !selectedPoint) {
         return false;
+    }
+
     return item._id === selectedPoint._id
         && item.lat === selectedPoint.lat
         && item.long === selectedPoint.long;
