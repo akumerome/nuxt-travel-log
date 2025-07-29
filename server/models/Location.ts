@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import type { ILocation } from "~/types/types";
 
-type LocationDocument = ILocation & mongoose.Document;
+export type LocationDocument = ILocation & mongoose.Document;
 
 const options = {
   collection: "location",

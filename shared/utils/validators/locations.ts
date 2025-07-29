@@ -11,6 +11,7 @@ export const schema = z.object({
             required_error: "Name is required.",
             invalid_type_error: "Name must be a string.",
         })
+        .min(1, "Name is required.")
         .max(NAME_MAX, `Name must contain at most ${NAME_MAX} characters.`),
     description: z
         .string()

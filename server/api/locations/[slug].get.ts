@@ -4,12 +4,13 @@ import { LocationLog } from "../../models/LocationLog";
 export default defineEventHandler(async (event) => {
     try {
 
+        await new Promise(resolve => setTimeout(resolve, 5000));
         // Makes sure the user is logged in
         // This will throw a 401 error if the request doesn't come from a valid user session
         const { user } = await requireUserSession(event);
 
         const slug = getRouterParam(event, "slug") as string;
-        const location = await Location.findOne({ user: user._id, slug }).populate("location_logs").lean() as ILocation;
+        const location = await Location.findOne({ slug, user: user._id }).populate("location_logs").lean() as ILocation;
 
         if (!location) {
             return sendError(event, createError({
