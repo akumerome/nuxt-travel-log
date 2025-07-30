@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
         }
 
         const oldSlug = getRouterParam(event, "slug") as string;
-        const location = await Location.findOne({ slug: oldSlug, user: user._id, }) as LocationDocument;
+        const location = await Location.findOne({ slug: oldSlug, user: user._id }) as LocationDocument;
 
         if (!location) {
             return sendError(event, createError({

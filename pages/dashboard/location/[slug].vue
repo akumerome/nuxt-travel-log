@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-
 const route = useRoute();
 const locationsStore = useLocationsStore();
 const { currentLocation: data, currentLocationStatus: status, currentLocationError: error } = storeToRefs(locationsStore);
@@ -25,7 +24,10 @@ onBeforeRouteUpdate((to) => {
     </div>
     <div v-if="route.name === 'dashboard-location-slug' && status !== 'pending' && data?.data.location">
         <div class="mb-4">
-            <h1 class="text-2xl font-bold">{{ data.data.location.name }}</h1>
+            <div class="flex gap-3">
+                <h1 class="text-2xl font-bold">{{ data.data.location.name }}</h1>
+                <DeleteLocationModal></DeleteLocationModal>
+            </div>
             <p class="text-sm text-dimmed">{{ data.data.location.description }}</p>
         </div>
         <div v-if="!data.data.location.location_logs.length" class="flex flex-col justify-center items-center gap-2">
