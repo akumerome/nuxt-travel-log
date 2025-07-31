@@ -1,7 +1,5 @@
 import { schema } from "~/shared/utils/validators/locations";
-import type { ILocation, ILocationLog } from "~/types/types";
-import { Location, LocationDocument } from "../../models/Location";
-import { LocationLog } from "../../models/LocationLog";
+import { Location } from "~/server/models/Location";
 import slugify from "~/shared/utils/helpers/slugify";
 
 export default defineEventHandler(async (event) => {
@@ -24,7 +22,7 @@ export default defineEventHandler(async (event) => {
         }
 
         const oldSlug = getRouterParam(event, "slug") as string;
-        const location = await Location.findOne({ slug: oldSlug, user: user._id }) as LocationDocument;
+        const location = await Location.findOne({ slug: oldSlug, user: user._id });
 
         if (!location) {
             return sendError(event, createError({
@@ -36,7 +34,7 @@ export default defineEventHandler(async (event) => {
         const newSlug = slugify(result.data.name);
 
         if (newSlug !== oldSlug) {
-            const doesLocationExist = await Location.findOne({ slug: newSlug, user: user._id }).lean() as ILocation;
+            const doesLocationExist = await Location.findOne({ slug: newSlug, user: user._id }).lean();
             if (doesLocationExist) {
                 return sendError(event, createError({
                     statusCode: 409,

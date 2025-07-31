@@ -1,4 +1,4 @@
-import { Location } from "../../models/Location";
+import { Location } from "~/server/models/Location";
 
 export default defineEventHandler(async (event) => {
     try {

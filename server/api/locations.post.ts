@@ -1,8 +1,6 @@
 import { schema } from "~/shared/utils/validators/locations";
-import { formatBodyValidationErrors } from "../utils/body-validation-error-formatter";
 import slugify from "~/shared/utils/helpers/slugify";
-import { Location } from "../models/Location";
-import { ILocation } from "~/types/types";
+import { Location } from "~/server/models/Location";
 
 export default defineEventHandler(async (event) => {
   try {
