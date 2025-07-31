@@ -32,9 +32,20 @@ onBeforeRouteUpdate((to) => {
         </div>
         <div v-if="!data.data.location.location_logs.length" class="flex flex-col justify-center items-center gap-2">
             <p class="text-sm text-dimmed">{{ data.data.location.name }} has no location logs yet!</p>
-            <UButton color="neutral" size="lg" to="/dashboard/add" trailing-icon="i-tabler-map-pin-plus">Add
+            <UButton color="neutral" size="lg" :to="`/dashboard/location/${data.data.location.slug}/add`"
+                trailing-icon="i-tabler-map-pin-plus">Add
                 location log
             </UButton>
+        </div>
+        <div>
+            <UCard v-for="location_log in data.data.location.location_logs"
+                class="bg-muted w-72 shadow-xl rounded-md shrink-0 border-2 border-transparent"
+                :ui="{ body: 'sm:p-4' }">
+                <div class="h-16 w-72">
+                    <div class="font-bold truncate">{{ location_log.name }}</div>
+                    <div class="text-sm line-clamp-2">{{ location_log.description }}</div>
+                </div>
+            </UCard>
         </div>
     </div>
     <div v-if="route.name !== 'dashboard-location-slug'">

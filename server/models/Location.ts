@@ -31,10 +31,6 @@ const LocationSchema = new mongoose.Schema<LocationDocument>(
       type: Number,
       required: true,
     },
-    location_logs: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'LocationLog'
-    }],
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

@@ -24,6 +24,7 @@ onUnmounted(() => {
             country, state or point of interest. You can add specific times you visited this location after adding it.
         </p>
     </div>
-    <EditLocationForm v-if="locationsStore.currentLocationStatus !== 'pending'"></EditLocationForm>
+    <EditLocationForm v-if="locationsStore.currentLocationStatus !== 'pending' && locationsStore.currentLocation">
+    </EditLocationForm>
 </div>
 </template>

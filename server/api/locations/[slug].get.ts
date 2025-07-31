@@ -1,6 +1,6 @@
-import type { ILocation, ILocationLog } from "~/types/types";
-import { Location } from "../../models/Location";
-import { LocationLog } from "../../models/LocationLog";
+import { LocationLog } from "~/server/models/LocationLog";
+import { Location } from "~/server/models/Location";
+
 export default defineEventHandler(async (event) => {
     try {
 
@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
         const { user } = await requireUserSession(event);
 
         const slug = getRouterParam(event, "slug") as string;
-        const location = await Location.findOne({ slug, user: user._id }).populate("location_logs").lean() as ILocation;
+        const location = await Location.findOne({ slug, user: user._id }).lean();
 
         if (!location) {
             return sendError(event, createError({
@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
             }));
         }
 
-        const location_logs = await LocationLog.find({ location: location._id }).lean() as ILocationLog[];
+        const location_logs = await LocationLog.find({ location: location._id }).lean();
         location.location_logs = location_logs;
 
         return {

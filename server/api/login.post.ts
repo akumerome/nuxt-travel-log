@@ -1,6 +1,5 @@
 import { schema } from "~/shared/utils/validators/login";
-import { formatBodyValidationErrors } from "../utils/body-validation-error-formatter";
-import { User } from "../models/User";
+import { User } from "~/server/models/User";
 
 export default defineEventHandler(async (event) => {
   try {
