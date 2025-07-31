@@ -18,7 +18,7 @@ export type SuccessfulResponse = {
 }
 
 export interface ILocation {
-    _id: string;
+    readonly _id: string;
     name: string;
     slug: string;
     description?: string;
@@ -31,7 +31,7 @@ export interface ILocation {
 };
 
 export interface ILocationLog {
-    _id: string;
+    readonly _id: string;
     name: string;
     description?: string;
     started_at: number;

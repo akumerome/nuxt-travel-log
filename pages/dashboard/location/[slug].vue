@@ -37,15 +37,19 @@ onBeforeRouteUpdate((to) => {
                 location log
             </UButton>
         </div>
-        <div>
-            <UCard v-for="location_log in data.data.location.location_logs"
-                class="bg-muted w-72 shadow-xl rounded-md shrink-0 border-2 border-transparent"
-                :ui="{ body: 'sm:p-4' }">
-                <div class="h-16 w-72">
-                    <div class="font-bold truncate">{{ location_log.name }}</div>
-                    <div class="text-sm line-clamp-2">{{ location_log.description }}</div>
-                </div>
-            </UCard>
+        <div v-if="data.data.location.location_logs.length" class="flex gap-4 scroll-container">
+            <MapPointCard v-for="location_log in data.data.location.location_logs" :key="location_log._id"
+                :map-point="createMapPointFromLocationLog(data.data.location, location_log)">
+                <template #footer>
+                    <p class="text-sm text-dimmed">
+                        <span v-if="location_log.started_at !== location_log.ended_at">
+                            {{ formatTimestamp(location_log.started_at) }} - {{ formatTimestamp(location_log.ended_at)
+                            }}
+                        </span>
+                        <span v-else>{{ formatTimestamp(location_log.started_at) }}</span>
+                    </p>
+                </template>
+            </MapPointCard>
         </div>
     </div>
     <div v-if="route.name !== 'dashboard-location-slug'">
