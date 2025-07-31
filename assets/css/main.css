@@ -19,6 +19,13 @@ input[type="number"]::-webkit-outer-spin-button {
   display: none;
 }
 
+.scroll-container {
+  overflow: auto;
+  padding-inline: 0.125rem;
+  padding-top: 0.125rem;
+  padding-bottom: 0.5rem;
+}
+
 .scroll-container::-webkit-scrollbar {
   width: 12px;
   /* vertical scrollbar */
