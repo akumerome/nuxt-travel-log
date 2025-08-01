@@ -40,10 +40,37 @@ export const useLocationsStore = defineStore("useLocationsStore", () => {
             sidebarStore.sidebarItems = sidebarItems;
             mapStore.mapPoints = mapPoints;
         } else if (currentLocation.value && CURRENT_LOCATION_PAGES.has(route.name?.toString() || "")) {
-            sidebarStore.sidebarItems = [];
-            mapStore.mapPoints = [currentLocation.value.data.location];
+            // sidebarStore.sidebarItems = [];
+            // mapStore.mapPoints = [currentLocation.value.data.location];
+
+            const mapPoints: MapPoint[] = [];
+            const sidebarItems: SidebarItem[] = [];
+
+            currentLocation.value.data.location.location_logs.forEach((location_log) => {
+                const mapPoint = createMapPointFromLocationLog(currentLocation.value!.data.location, location_log);
+                sidebarItems.push({
+                    _id: `location-log-${location_log._id}`,
+                    label: location_log.name,
+                    icon: "i-tabler-map-pin-filled",
+                    href: `/dashboard/location/${currentLocation.value?.data.location.slug}/${location_log._id}`,
+                    mapPoint,
+                });
+                mapPoints.push(mapPoint);
+            });
+
+            sidebarStore.sidebarItems = sidebarItems;
+
+            if (mapPoints.length) {
+                mapStore.mapPoints = mapPoints;
+            } else {
+                mapStore.mapPoints = [currentLocation.value.data.location];
+            }
         }
-        sidebarStore.loading = locationsStatus.value === "pending";
+        sidebarStore.loading = locationsStatus.value === "pending" || currentLocationStatus.value === "pending";
+
+        if (sidebarStore.loading) {
+            mapStore.mapPoints = [];
+        }
     });
 
     return {

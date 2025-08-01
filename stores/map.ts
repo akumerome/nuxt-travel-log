@@ -18,6 +18,10 @@ export const useMapStore = defineStore("useMapStore", () => {
         effect(() => {
             const firstPoint = mapPoints.value[0];
             if (!firstPoint) {
+                map.map?.flyTo({
+                    center: [0.1, 0.1],
+                    zoom: 10,
+                });
                 return;
             }
 
