@@ -25,7 +25,7 @@ export interface ILocation {
     lat: number;
     long: number;
     location_logs: Array<any>;
-    user: mongoose.Schema.Types.ObjectId;
+    user: string;
     created_at: number;
     updated_at: number;
 };
@@ -38,8 +38,8 @@ export interface ILocationLog {
     ended_at: number;
     lat: number;
     long: number;
-    location: mongoose.Schema.Types.ObjectId,
-    user: mongoose.Schema.Types.ObjectId;
+    location: string,
+    user: string;
     created_at: number;
     updated_at: number;
 };
@@ -53,5 +53,11 @@ export type SuccessfulLocationsResponse = {
 export type SuccessfulLocationResponse = {
     data: {
         location: ILocation;
+    }
+} & SuccessfulResponse;
+
+export type SuccessfulLocationLogResponse = {
+    data: {
+        location_log: ILocationLog;
     }
 } & SuccessfulResponse;

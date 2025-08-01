@@ -1,6 +1,5 @@
-import { CURRENT_LOCATION_PAGES, LOCATION_PAGES } from "~/lib/constants";
-import type { SuccessfulLocationsResponse } from "~/types/types";
-import type { SuccessfulLocationResponse } from "~/types/types";
+import { CURRENT_LOCATION_LOG_PAGES, CURRENT_LOCATION_PAGES, LOCATION_PAGES } from "~/lib/constants";
+import type { SuccessfulLocationsResponse, SuccessfulLocationResponse, SuccessfulLocationLogResponse } from "~/types/types";
 import type { MapPoint } from "~/types/types";
 
 export const useLocationsStore = defineStore("useLocationsStore", () => {
@@ -10,8 +9,20 @@ export const useLocationsStore = defineStore("useLocationsStore", () => {
     });
 
     const locationUrlWithSlug = computed(() => `/api/locations/${route.params.slug}`);
+    const locationLogUrlWithSlugAndId = computed(() => `/api/locations/${route.params.slug}/${route.params.id}`);
 
     const { data: currentLocation, status: currentLocationStatus, error: currentLocationError, refresh: refreshCurrentLocation } = useFetch<SuccessfulLocationResponse>(locationUrlWithSlug, {
+        lazy: true,
+        immediate: false,
+        watch: false,
+    });
+
+    const {
+        data: currentLocationLog,
+        status: currentLocationLogStatus,
+        error: currentLocationLogError,
+        refresh: refreshCurrentLocationLog,
+    } = useFetch<SuccessfulLocationLogResponse>(locationLogUrlWithSlugAndId, {
         lazy: true,
         immediate: false,
         watch: false,
@@ -40,9 +51,6 @@ export const useLocationsStore = defineStore("useLocationsStore", () => {
             sidebarStore.sidebarItems = sidebarItems;
             mapStore.mapPoints = mapPoints;
         } else if (currentLocation.value && CURRENT_LOCATION_PAGES.has(route.name?.toString() || "")) {
-            // sidebarStore.sidebarItems = [];
-            // mapStore.mapPoints = [currentLocation.value.data.location];
-
             const mapPoints: MapPoint[] = [];
             const sidebarItems: SidebarItem[] = [];
 
@@ -65,6 +73,9 @@ export const useLocationsStore = defineStore("useLocationsStore", () => {
             } else {
                 mapStore.mapPoints = [currentLocation.value.data.location];
             }
+        } else if (currentLocationLog.value && CURRENT_LOCATION_LOG_PAGES.has(route.name?.toString() || "")) {
+            sidebarStore.sidebarItems = [];
+            mapStore.mapPoints = [currentLocationLog.value.data.location_log];
         }
         sidebarStore.loading = locationsStatus.value === "pending" || currentLocationStatus.value === "pending";
 
@@ -81,5 +92,9 @@ export const useLocationsStore = defineStore("useLocationsStore", () => {
         currentLocationStatus,
         currentLocationError,
         refreshCurrentLocation,
+        currentLocationLog,
+        currentLocationLogStatus,
+        currentLocationLogError,
+        refreshCurrentLocationLog,
     };
 });

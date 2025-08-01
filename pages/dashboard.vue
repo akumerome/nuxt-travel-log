@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { CURRENT_LOCATION_PAGES, EDIT_PAGES, LOCATION_PAGES } from '~/lib/constants';
+import { CURRENT_LOCATION_LOG_PAGES, CURRENT_LOCATION_PAGES, EDIT_PAGES, LOCATION_PAGES } from '~/lib/constants';
 
 definePageMeta({
     middleware: ["auth"],
@@ -14,8 +14,13 @@ if (LOCATION_PAGES.has(route.name?.toString() || "")) {
     await locationsStore.refreshLocations();
 }
 
-if (CURRENT_LOCATION_PAGES.has(route.name?.toString() || "")) {
+if (CURRENT_LOCATION_PAGES.has(route.name?.toString() || "") || CURRENT_LOCATION_LOG_PAGES.has(route.name?.toString() || "")) {
     await locationsStore.refreshCurrentLocation();
+}
+
+
+if (CURRENT_LOCATION_LOG_PAGES.has(route.name?.toString() || "")) {
+    await locationsStore.refreshCurrentLocationLog();
 }
 
 effect(() => {
@@ -65,6 +70,15 @@ effect(() => {
                     label: 'Add location log',
                 }
             );
+        }
+    } else if (CURRENT_LOCATION_LOG_PAGES.has(route.name?.toString() || "")) {
+        if (data.value && status.value !== "pending") {
+            sidebarStore.sidebarTopItems = [{
+                _id: "location",
+                icon: "i-tabler-arrow-left",
+                label: data.value.data.location.name,
+                href: `/dashboard/location/${route.params.slug}`,
+            }];
         }
     }
 })
