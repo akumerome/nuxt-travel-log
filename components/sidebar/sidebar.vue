@@ -34,7 +34,7 @@ function toggleSidebar() {
             class="flex flex-col gap-1">
             <USkeleton v-for="x in 3" class="bg-accented h-[var(--collapsed-sidebar-element-size)] w-full" />
         </div>
-        <USeparator v-if="sidebarStore.sidebarItems.length" />
+        <USeparator v-if="sidebarStore.sidebarItems.length || sidebarStore.loading" />
         <div v-if="sidebarStore.loading" class="flex flex-col gap-1">
             <USkeleton v-for="x in 3" class="bg-accented h-[var(--collapsed-sidebar-element-size)] w-full" />
         </div>
