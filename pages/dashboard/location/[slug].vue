@@ -12,6 +12,14 @@ onBeforeRouteUpdate((to) => {
         locationsStore.refreshCurrentLocation();
     }
 });
+
+async function deleteLocation() {
+    await $fetch(`/api/locations/${route.params.slug}`, {
+        method: "DELETE",
+    });
+
+    await navigateTo("/dashboard");
+}
 </script>
 
 <template>
@@ -26,7 +34,12 @@ onBeforeRouteUpdate((to) => {
         <div class="mb-4">
             <div class="flex gap-3">
                 <h1 class="text-2xl font-bold">{{ data.data.location.name }}</h1>
-                <DeleteLocationModal></DeleteLocationModal>
+                <AppModal title="Delete location?" description="Deleting this location will also delete all of the associated logs. This
+                action cannot be undoned. Are you sure?" onConfirmedLabel="Delete" :onConfirmed="deleteLocation">
+                    <template #trigger>
+                        <UButton color="error" icon="i-tabler-trash-x-filled" variant="outline" />
+                    </template>
+                </AppModal>
             </div>
             <p class="text-sm text-dimmed">{{ data.data.location.description }}</p>
         </div>

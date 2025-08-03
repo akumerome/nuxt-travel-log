@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+
 const route = useRoute();
 const locationsStore = useLocationsStore();
 const { currentLocationLog: data, currentLocationLogStatus: status, currentLocationLogError: error } = storeToRefs(locationsStore);
@@ -12,6 +13,14 @@ onBeforeRouteUpdate((to) => {
         locationsStore.refreshCurrentLocationLog();
     }
 });
+
+async function deleteLocationLog() {
+    await $fetch(`/api/locations/${route.params.slug}/${route.params.id}`, {
+        method: "DELETE",
+    });
+
+    await navigateTo(`/dashboard/location/${route.params.slug}`);
+}
 </script>
 
 <template>
@@ -26,7 +35,13 @@ onBeforeRouteUpdate((to) => {
         <div class="mb-4">
             <div class="flex gap-3">
                 <h1 class="text-2xl font-bold">{{ data.data.location_log.name }}</h1>
-                <DeleteLocationModal></DeleteLocationModal>
+                <AppModal title="Delete location log?"
+                    description="Deleting this location log cannot be undoned. Are you sure?" onConfirmedLabel="Delete"
+                    :onConfirmed="deleteLocationLog">
+                    <template #trigger>
+                        <UButton color="error" icon="i-tabler-trash-x-filled" variant="outline" />
+                    </template>
+                </AppModal>
             </div>
             <p class="text-sm text-dimmed">{{ data.data.location_log.description }}</p>
             <p class="text-sm text-dimmed">
