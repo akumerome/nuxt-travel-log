@@ -8,11 +8,16 @@ export default defineNuxtConfig({
     "@nuxt/ui",
     "nuxt-auth-utils",
     "nuxt-csurf",
-    '@pinia/nuxt',
+    "@pinia/nuxt",
     "nuxt-maplibre",
   ],
   css: ["~/assets/css/main.css"],
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      watch: {
+        ignored: ["./docker-data/*"]
+      }
+    }
   },
 });
