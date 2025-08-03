@@ -1,9 +1,16 @@
 <script lang="ts" setup>
+const route = useRoute();
 const locationsStore = useLocationsStore();
 const { currentLocationLog: data, currentLocationLogStatus: status, currentLocationLogError: error } = storeToRefs(locationsStore);
 
 onMounted(() => {
     locationsStore.refreshCurrentLocationLog();
+});
+
+onBeforeRouteUpdate((to) => {
+    if (to.name === "dashboard-location-slug-id") {
+        locationsStore.refreshCurrentLocationLog();
+    }
 });
 </script>
 
@@ -15,7 +22,7 @@ onMounted(() => {
     <div v-if="status !== 'pending' && error">
         <UAlert v-if="error" color="error" icon="i-tabler-circle-x" :title="error.statusMessage" />
     </div>
-    <div v-if="status !== 'pending' && data?.data.location_log">
+    <div v-if="route.name === 'dashboard-location-slug-id' && status !== 'pending' && data?.data.location_log">
         <div class="mb-4">
             <div class="flex gap-3">
                 <h1 class="text-2xl font-bold">{{ data.data.location_log.name }}</h1>
@@ -31,6 +38,9 @@ onMounted(() => {
                 <span v-else>{{ formatTimestamp(data.data.location_log.started_at) }}</span>
             </p>
         </div>
+    </div>
+    <div v-if="route.name !== 'dashboard-location-slug-id'">
+        <NuxtPage></NuxtPage>
     </div>
 </div>
 </template>
