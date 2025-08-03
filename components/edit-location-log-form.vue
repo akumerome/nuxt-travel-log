@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { schema } from "~/shared/utils/validators/locations";
-import type { Schema } from "~/shared/utils/validators/locations";
+import { schema } from "~/shared/utils/validators/location-logs";
+import type { Schema } from "~/shared/utils/validators/location-logs";
 import type { FormSubmitEvent } from "@nuxt/ui";
 import { FetchError } from "ofetch";
+import { CalendarDate } from '@internationalized/date'
 
 const route = useRoute();
 const mapStore = useMapStore();
@@ -13,22 +14,23 @@ const error = ref<string | null>(null);
 const locationsStore = useLocationsStore();
 
 const state = reactive<Partial<Schema>>({
-    name: locationsStore.currentLocation?.data.location?.name,
-    description: locationsStore.currentLocation?.data.location?.description,
-    lat: locationsStore.currentLocation?.data.location?.lat,
-    long: locationsStore.currentLocation?.data.location?.long,
+    name: locationsStore.currentLocationLog?.data.location_log.name,
+    description: locationsStore.currentLocationLog?.data.location_log.description,
+    started_at: locationsStore.currentLocationLog?.data.location_log.started_at,
+    ended_at: locationsStore.currentLocationLog?.data.location_log.ended_at,
+    lat: locationsStore.currentLocationLog?.data.location_log.lat,
+    long: locationsStore.currentLocationLog?.data.location_log.long,
 });
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
     error.value = null;
     try {
-        const edited = await $csrfFetch(`/api/locations/${route.params.slug}`, {
+        const edited = await $csrfFetch(`/api/locations/${route.params.slug}/${route.params.id}`, {
             method: "PUT",
             body: event.data,
         });
-
         submitted.value = true;
-        await navigateTo(`/dashboard/location/${edited.data.location.slug}`);
+        navigateTo(`/dashboard/location/${route.params.slug}/${route.params.id}`);
     } catch (e) {
         const fetchError = e as FetchError;
         if (fetchError.data?.data) {
@@ -58,6 +60,15 @@ effect(() => {
         state.long = mapStore.addedPoint.long;
     }
 });
+
+function calendarDateToTimestamp(cd: CalendarDate): number {
+    return new Date(cd.year, cd.month - 1, cd.day).getTime();
+}
+
+function onDateRangeChange(value: { start: CalendarDate; end: CalendarDate }) {
+    state.started_at = calendarDateToTimestamp(value.start);
+    state.ended_at = calendarDateToTimestamp(value.end);
+}
 </script>
 
 <template>
@@ -70,6 +81,11 @@ effect(() => {
         <UTextarea v-model="state.description" class="w-full" color="neutral" placeholder="The City of Lights" :rows="6"
             :maxrows="6" autoresize />
     </UFormField>
+
+    <div>
+        <p class="text-sm mb-1">Dates</p>
+        <AppCalendarPicker :start="state.started_at!" :end="state.ended_at!" @update="onDateRangeChange" />
+    </div>
 
     <div class="flex gap-3">
         <div
@@ -89,11 +105,10 @@ effect(() => {
         </UFormField>
     </div>
 
-
     <div class="mt-4 grid">
         <UAlert v-if="error" class="mb-4" color="error" icon="i-tabler-circle-x" :title="error" />
 
-        <UButton class="justify-self-end" color="neutral" loading-auto type="submit">Edit location
+        <UButton class="justify-self-end" color="neutral" loading-auto type="submit">Edit location log
         </UButton>
     </div>
 </UForm>

@@ -78,6 +78,16 @@ effect(() => {
                 icon: "i-tabler-arrow-left",
                 label: data.value.data.location.name,
                 href: `/dashboard/location/${route.params.slug}`,
+            }, {
+                _id: "location-log",
+                label: "View log",
+                icon: "i-tabler-map-pin",
+                href: `/dashboard/location/${route.params.slug}/${route.params.id}`,
+            }, {
+                _id: "edit-location-log",
+                label: "Edit log",
+                icon: 'i-tabler-map-pin-cog',
+                href: `/dashboard/location/${route.params.slug}/${route.params.id}/edit`,
             }];
         }
     }
