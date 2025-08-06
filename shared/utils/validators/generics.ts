@@ -23,13 +23,13 @@ export const LatitudeSchema = z
         required_error: "Latitude is required.",
         invalid_type_error: "Latitude must be a number.",
     })
-    .min(-LAT_MAX, `Latitude must be greater than or equal to -${LAT_MAX}`)
-    .max(LAT_MAX, `Latitude must be less than or equal to ${LAT_MAX}`);
+    .min(-LAT_MAX, `Latitude must be greater than or equal to -${LAT_MAX}.`)
+    .max(LAT_MAX, `Latitude must be less than or equal to ${LAT_MAX}.`);
 
 export const LongitudeSchema = z
     .number({
         required_error: "Longitude is required.",
         invalid_type_error: "Longitude must be a number.",
     })
-    .min(-LONG_MAX, `Longitude must be greater than or equal to -${LONG_MAX}`)
-    .max(LONG_MAX, `Longitude must be less than or equal to ${LONG_MAX}`);
+    .min(-LONG_MAX, `Longitude must be greater than or equal to -${LONG_MAX}.`)
+    .max(LONG_MAX, `Longitude must be less than or equal to ${LONG_MAX}.`);

@@ -1,4 +1,5 @@
 import { LocationLog } from "~/server/models/LocationLog";
+import { LocationLogImage } from "~/server/models/LocationLogImage";
 
 export default defineEventHandler(async (event) => {
     try {
@@ -16,6 +17,9 @@ export default defineEventHandler(async (event) => {
                 statusMessage: "Location log not found.",
             }));
         }
+
+        const locationLogImages = await LocationLogImage.find({ location_log: locationLog._id }).sort({ created_at: -1 }).lean();
+        locationLog.location_log_images = locationLogImages;
 
         return {
             statusCode: 200,

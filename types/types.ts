@@ -38,8 +38,17 @@ export interface ILocationLog {
     ended_at: number;
     lat: number;
     long: number;
-    location: string,
-    user: string;
+    location: mongoose.ObjectId | string,
+    location_log_images: Array<any>;
+    user: mongoose.ObjectId | string;
+    created_at: number;
+    updated_at: number;
+};
+
+export interface ILocationLogImage {
+    readonly _id: string;
+    location_log: mongoose.ObjectId | string,
+    user: mongoose.ObjectId | string;
     created_at: number;
     updated_at: number;
 };

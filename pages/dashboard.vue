@@ -88,6 +88,11 @@ effect(() => {
                 label: "Edit log",
                 icon: 'i-tabler-map-pin-cog',
                 href: `/dashboard/location/${route.params.slug}/${route.params.id}/edit`,
+            }, {
+                _id: "manage-images",
+                label: "Images",
+                icon: 'i-tabler-camera-cog',
+                href: `/dashboard/location/${route.params.slug}/${route.params.id}/images`,
             }];
         }
     }
