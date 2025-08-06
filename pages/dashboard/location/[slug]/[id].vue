@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 
+const config = useRuntimeConfig();
 const route = useRoute();
 const locationsStore = useLocationsStore();
 const { currentLocationLog: data, currentLocationLogStatus: status, currentLocationLogError: error } = storeToRefs(locationsStore);
@@ -52,6 +53,21 @@ async function deleteLocationLog() {
                 </span>
                 <span v-else>{{ formatTimestamp(data.data.location_log.started_at) }}</span>
             </p>
+            <div v-if="!data.data.location_log.location_log_images.length"
+                class="flex flex-col justify-center items-center gap-2">
+                <p class="text-sm text-dimmed">{{ data.data.location_log.name }} has no images yet!</p>
+                <UButton color="neutral" size="lg"
+                    :to="`/dashboard/location/${locationsStore.currentLocation?.data.location.slug}/${locationsStore.currentLocationLog?.data.location_log._id}/images`"
+                    trailing-icon="i-tabler-camera-plus">Add
+                    image
+                </UButton>
+            </div>
+            <div v-if="data.data.location_log.location_log_images.length" class="flex gap-4 scroll-container mt-2">
+                <div v-for="image in data.data.location_log.location_log_images"
+                    class="w-72 aspect-3/2 shadow-xl rounded-lg shrink-0 overflow-hidden">
+                    <img class="size-full object-cover" :src="`${config.public.s3BucketUrl}/${image.key}`" alt="">
+                </div>
+            </div>
         </div>
     </div>
     <div v-if="route.name !== 'dashboard-location-slug-id'">

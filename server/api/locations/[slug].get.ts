@@ -18,8 +18,8 @@ export default defineEventHandler(async (event) => {
             }));
         }
 
-        const location_logs = await LocationLog.find({ location: location._id }).sort({ started_at: 1, ended_at: 1 }).lean();
-        location.location_logs = location_logs;
+        const locationLogs = await LocationLog.find({ location: location._id }).sort({ started_at: 1, ended_at: 1 }).lean();
+        location.location_logs = locationLogs;
 
         return {
             statusCode: 200,
