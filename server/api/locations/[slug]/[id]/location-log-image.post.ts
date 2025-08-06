@@ -24,8 +24,8 @@ export default defineEventHandler(async (event) => {
         }
 
         const slug = getRouterParam(event, "slug") as string;
-        const id = getRouterParam(event, "id") as string;
-        await event.$fetch(`/api/locations/${slug}/${id}`);
+        const _id = getRouterParam(event, "id") as string;
+        await event.$fetch(`/api/locations/${slug}/${_id}`);
 
         const client = createS3Client();
         const command = new GetObjectCommand({
@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
         const metadata = response.Metadata;
 
         if (!metadata
-            || metadata["location-log-id"] !== id
+            || metadata["location-log-id"] !== _id
             || metadata["user-id"] !== user._id.toString()) {
             return sendError(event, createError({
                 statusCode: 404,
@@ -47,7 +47,7 @@ export default defineEventHandler(async (event) => {
 
         const created = new LocationLogImage({
             ...result.data,
-            location_log: id,
+            location_log: _id,
             user: user._id,
         });
         await created.save();

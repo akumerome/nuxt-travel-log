@@ -23,13 +23,13 @@ export default defineEventHandler(async (event) => {
         }
 
         const slug = getRouterParam(event, "slug") as string;
-        const id = getRouterParam(event, "id") as string;
-        await event.$fetch(`/api/locations/${slug}/${id}`);
+        const _id = getRouterParam(event, "id") as string;
+        await event.$fetch(`/api/locations/${slug}/${_id}`);
 
         const client = createS3Client();
 
         const fileName = crypto.randomUUID();
-        const key = `${user._id}/${id}/${fileName}.jpg`;
+        const key = `${user._id}/${_id}/${fileName}.jpg`;
 
         const { url, fields } = await createPresignedPost(client, {
             Bucket: env.S3_BUCKET,
@@ -41,12 +41,12 @@ export default defineEventHandler(async (event) => {
             Conditions: [
                 ["content-length-range", result.data.content_length, result.data.content_length],
                 ["eq", "$x-amz-meta-user-id", user._id.toString()],
-                ["eq", "$x-amz-meta-location-log-id", id],
+                ["eq", "$x-amz-meta-location-log-id", _id],
             ],
         });
 
         fields["x-amz-meta-user-id"] = user._id.toString();
-        fields["x-amz-meta-location-log-id"] = id;
+        fields["x-amz-meta-location-log-id"] = _id;
 
         return {
             url,
